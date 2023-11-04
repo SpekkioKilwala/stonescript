@@ -1,5 +1,7 @@
 // The way of the open hand
 
+import console
+
 // Test to make sure that this is working.
 >h-1,-1,ascii
 ###

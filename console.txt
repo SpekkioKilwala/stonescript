@@ -1,0 +1,24 @@
+// I think that the way to use this one is to import it, not assign it to a var.
+// I'm not SURE, but I THINK this should let me send things to the console from any script.
+// Which means it runs on every tick.
+
+var _log = []
+var active = 0
+
+?loc.begin
+  var p = ui.AddPanel()
+  p.visible=true
+  p.color = #red
+  p.anchor = top_right
+  p.dock = top_right
+  p.y = 1
+  p.w = 32
+  p.h = 12
+
+?key=bumpRBegin // C to toggle the console display on or off
+  ?p.visible=true
+    p.visible=false
+  :
+    p.visible=true
+
+//func log(str)
