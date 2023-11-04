@@ -4,6 +4,7 @@
 
 var _log = []
 var active = 0
+var _style = -2
 
 ?loc.begin
   var p = ui.AddPanel()
@@ -14,11 +15,25 @@ var active = 0
   p.y = 1
   p.w = 32
   p.h = 12
+  p.style = _style
+  var t = ui.AddText()
+  t.text = "Hellp World!"
+  p.Add(t)
 
 ?key=bumpRBegin // C to toggle the console display on or off
   ?p.visible=true
     p.visible=false
   :
     p.visible=true
+
+/*
+// Move this onto a different keybind if I want to keep it.
+// Maybe I can put it onto Shift-C?
+?key=backBegin
+  _style++
+  ?_style>8
+    _style=-8 
+  p.style=_style
+*/
 
 //func log(str)
