@@ -1,0 +1,125 @@
+// The way of the open hand
+
+// Test to make sure that this is working.
+>h-1,-1,ascii
+###
+>:3
+asciiend
+
+var initialised = 0
+var leftHand = new openHand // remember left hand can't take shields
+var rightHand = new openHand
+
+// I need a readout very badly.
+var readout
+var readoutTemplate = "[RH] pri:{0} tsk:{1} dly:{2}"
+
+// PARTICULAR ITEMS
+var parry = vigor shield
+
+// Program flow
+var priority = 0
+
+?initialised = 0
+  leftHand.init(lh)
+  rightHand.init(rh)
+  initialised = 1
+
+func lowestActive() // lowest priority hand to skip evaluating stuff that can't happen
+  return Math.min(leftHand.priority, rightHand.priority)
+
+var poisonCooldown = 0 // I want to give poison enough time to hit the enemy before recasting
+
+func tryPoison() // should we try poisoning this enemy?
+// Enemy must be in range, not poisoned, not dead, able to BE poisoned, and also not fired too recently.
+// This is odd. The range of a poison wand is supposed to be 17, but this only works right if I'm pulling it out a little sooner.
+  ? poisonCooldown=0 & foe.distance <= 20 & foe.state!4 & foe.debuffs.string!"debuff_damage" & foe!immune_to_debuff_damage
+    poisonCooldown = 20
+    return 1
+  :
+    return 0
+
+
+  // this mess ain't working
+  // ? poisonCooldown=0 & foe.distance <= 17 & foe.state!4 & foe.debuffs.string!"debuff_damage" & foe!immune_poison
+
+
+
+// What are all my priority levels?
+// 13 Manual Input
+// 12 "Panic" (super-special cases e.g. having lethal on bosses or dodging Dysangelos' death laser - stuff to Not Die Right Now)
+// 11 Special (stockpile Smite, bardiche hit)
+// 10 Parry (vigor shield up)
+// 9 Heal (active e.g. vigor sword - only if low)
+// 8 Debuff (poison, ice, fire in that order)
+// 7 Attack (preferred)
+// 6 Attack (secondary)
+// 5 Fallback (raise a shield or something)
+//  ------ out of battle
+// 4 Heal (passive)
+// 3 Stockpile Armour?
+// 2 Gather resources
+// 1 Proceed to the next battle (dash, triskelion)
+// 0 Nothing
+
+// that is 13 fucking levels
+
+// I'm going to try to reimplement the basic defense.
+// we check to see if we should be defending against a snail.
+// If so, give the right hand the shield task.
+// Otherwise, equip the SWORD. So I can tell if it's working.
+
+
+// ========== SECTION: MANUAL (13 theoretically) ===========
+priority = 15
+
+?lowestActive() < priority
+  ?key=bumpL // manual shield key
+    rightHand.newTask(parry, priority, 3)
+
+// ======== SECTION: AUTO-PARRY (10) =========
+priority--
+
+?lowestActive() < priority
+  ?foe=collossal_snail & foe.state=32 & foe.time=27
+    rightHand.newTask(parry, priority, 10)
+
+// ======== SECTION: DEBUFFS (8) =========
+priority--
+
+//>o0,-3,@lowestActive()+ " " + priority@
+
+?lowestActive() < priority
+  //play ui_starnew
+  ?tryPoison()=1 // handles delay internally
+    // readout = ?time
+    // >o-8,-6,@readout@
+    rightHand.newTask(poison wand, priority, 15)
+
+
+// ====== SECTION: SECONDARY ATTACK (6) ===== 
+priority--
+
+?lowestActive() < priority
+  ?loc=undead_crypt
+    leftHand.newTask(vigor wand, priority, 0)
+    rightHand.newTask(parry, priority, 0)
+  ?1=1 // conditional always goes here
+    // because sword has a duration of zero, it will immediately run out on the next tick!
+    rightHand.newTask(sword, priority, 0)
+
+// ======= END OF AUTOMATIC ACTIONS
+
+// ======= COOLDOWNS / TICKS
+
+rightHand.tick()
+leftHand.tick()
+
+?foe.state=4 // if the foe is DEAD, reset the poison cooldown
+  poisonCooldown = 0
+
+?poisonCooldown>0
+  poisonCooldown--
+
+// readout = string.Format(readoutTemplate, rightHand.priority, rightHand.task, rightHand.delay)
+//>o-8,-5,@readout@

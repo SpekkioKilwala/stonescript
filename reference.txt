@@ -1,0 +1,46 @@
+/*
+Locations:
+???
+deadwood
+caves
+forest
+undead_crypt
+???
+*/
+
+/* 
+Attack frames:
+
+collossal_snail : 27
+epic_snail : ??
+
+yeti :
+
+*/
+
+/*
+Handy monster keywords
+(in foe directly)
+
+Ice
+
+immune_to_stun
+immune_to_debuff_damage
+
+boss
+
+unpushable
+
+humanoid
+*/
+
+/*
+Statuses:
+
+debuff_damage
+debuff_dot
+  "add a : at the end of the name if you  only want to refer to the offensive one, and not both"
+debuff_dot_2 (that's the defensive one)
+debuff_chill
+
+*/

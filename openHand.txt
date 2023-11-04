@@ -1,0 +1,37 @@
+// To keep track of what a hand is currently doing, so it can tell whether it can accept a new task.
+// No, the left hand doesn't know what the right is doing.
+
+var hand // rh or lh
+var task = none // readable string of what is being done
+var delay = 0 // how much longer the current task will go for
+var priority = 0 // priority of the current task, can only be replaced by HIGHER priority
+
+func init(_hand)
+  hand = _hand
+
+func handEquip(_thing)
+  ?hand = rh
+    equipR @_thing@
+  :?hand = lh
+    equipL @_thing@
+  :
+    // an error message would be nice
+
+
+func tick()
+  ?delay>0
+    delay--
+  ?delay=0
+    task=none
+    priority=0
+
+func newTask(_task, _priority, _delay)
+  ?priority>=_priority
+    return 0
+  :
+    >@_task@
+    priority = _priority
+    task = _task
+    delay = _delay
+    handEquip(task)
+    return 1
