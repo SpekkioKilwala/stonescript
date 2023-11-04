@@ -19,7 +19,6 @@ var _style = -2
   p.w = 32
   p.h = 12
   p.style = _style
-  newLine("Hello World", 0)
 
 func newLine(str)
   // given a string, create the text element, and does initial positioning.
@@ -38,9 +37,7 @@ func newLine(str)
 func redraw()
   // If _log is too long (>10 elements), remove them from the start AND remove them from the panel.
   // call this whenever the contents of the _log array changes
-
-  // first, remove excess items (todo)
-
+  // Todo: add a check to remove excess items.
   var count = _log.Count()
   var t
   ?count > 0
@@ -58,4 +55,3 @@ func redraw()
     p.visible=false
   :
     p.visible=true
-
