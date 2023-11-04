@@ -6,6 +6,8 @@ var task = none // readable string of what is being done
 var delay = 0 // how much longer the current task will go for
 var priority = 0 // priority of the current task, can only be replaced by HIGHER priority
 
+var logger = import logger
+
 func init(_hand)
   hand = _hand
 
@@ -29,7 +31,13 @@ func newTask(_task, _priority, _delay)
   ?priority>=_priority
     return 0
   :
-    >@_task@
+    // disabling the task reporting until I decide how to deal with things happening every frame
+    // I can't generally stop delay from elapsing because a hand CAN'T move on to lower-priority tasks unless it does.
+    // I could artificially suppress reporting if the new line is the same as the old one.
+    // No, the answer is that I need to be clear between wanting to STAY in the same state, and wanting to REPEAT/RESTART an action.
+    // I need to split up the layers of control; at the weakest level, you respect priority and don't replace an identical task.
+    // and at the strongest level you just straight up SET it. There's maybe a middle level where you can replace an equal task.
+    // logger.newLine(_task)
     priority = _priority
     task = _task
     delay = _delay

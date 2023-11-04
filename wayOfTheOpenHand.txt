@@ -41,12 +41,6 @@ func tryPoison() // should we try poisoning this enemy?
   :
     return 0
 
-
-  // this mess ain't working
-  // ? poisonCooldown=0 & foe.distance <= 17 & foe.state!4 & foe.debuffs.string!"debuff_damage" & foe!immune_poison
-
-
-
 // What are all my priority levels?
 // 13 Manual Input
 // 12 "Panic" (super-special cases e.g. having lethal on bosses or dodging Dysangelos' death laser - stuff to Not Die Right Now)

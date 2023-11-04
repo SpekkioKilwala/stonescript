@@ -5,6 +5,7 @@
 var _log = []
 var active = 0
 var _style = -2
+var t // reuse this
 
 // I thinnnnnk the way to do it is to keep an array of all your *text components*,
 // then whenever that array changes you redraw the thingy.
@@ -23,7 +24,7 @@ var _style = -2
 func newLine(str)
   // given a string, create the text element, and does initial positioning.
   // (correct vertical alignment is done by redraw())
-  var t = ui.AddText()
+  t = ui.AddText()
   t.text = str
   t.w = p.w
   t.align = left
@@ -39,7 +40,6 @@ func redraw()
   // call this whenever the contents of the _log array changes
   // Todo: add a check to remove excess items.
   var count = _log.Count()
-  var t
   ?count > 0
     for i = 0 .. count - 1
       t = _log[i]
