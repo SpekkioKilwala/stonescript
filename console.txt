@@ -6,6 +6,8 @@ var _log = []
 var active = 0
 var _style = -2
 
+var i = 0
+
 ?loc.begin
   var p = ui.AddPanel()
   p.visible=true
@@ -16,9 +18,24 @@ var _style = -2
   p.w = 32
   p.h = 12
   p.style = _style
+  newLine("Hello World", 0)
+
+func newLine(str, offset)
+  // given a string, create the text element, size/align it to the parent panel p, and place it there correctly.
   var t = ui.AddText()
-  t.text = "Hellp World!"
+  t.text = str
+  t.w = p.w
+  t.align = left
+  t.dock = top_left
+  t.anchor = top_left
+  t.x = 1
+  t.y = 1 + offset
   p.Add(t)
+
+//func log(str)
+
+
+
 
 ?key=bumpRBegin // C to toggle the console display on or off
   ?p.visible=true
@@ -27,7 +44,7 @@ var _style = -2
     p.visible=true
 
 /*
-// Move this onto a different keybind if I want to keep it.
+// Cycles the panel style. Disabled to free up the key.
 // Maybe I can put it onto Shift-C?
 ?key=backBegin
   _style++
@@ -35,5 +52,3 @@ var _style = -2
     _style=-8 
   p.style=_style
 */
-
-//func log(str)
