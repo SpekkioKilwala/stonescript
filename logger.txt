@@ -59,12 +59,3 @@ func redraw()
   :
     p.visible=true
 
-/*
-// Cycles the panel style. Disabled to free up the key.
-// Maybe I can put it onto Shift-C?
-?key=backBegin
-  _style++
-  ?_style>8
-    _style=-8 
-  p.style=_style
-*/
