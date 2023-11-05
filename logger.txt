@@ -35,12 +35,16 @@ func init()
 
 func log(_str)
   // given a string, add it to the array, trim the array, then re-derive the contents of the console panel text.
-  // We want the MOST recent lines at the END so they go to the BOTTOM of the console.
+  // "newest at the end" wasn't formatting right at all, so I'm putting the newest stuff at the TOP.
   var str = _str + "" // I don't trust incoming stuff to actually be a string
-  _log.Add(str)
+  // _log.Add(str)
+  ?_log.Count()=0
+    _log.Add(str) // You can't insert at 0 when an array is empty?
+  :
+    _log.Insert(0, str)
   ?_log.Count()>maxHistory // this is only safe because we only add one line at a time; otherwise I'd need a loop.
-    _log.RemoveAt(0)
-  >@_log.Count() + : + str@
+    _log.RemoveAt(maxHistory-1)
+  >@_log.Count()@
   recreateText()
 
 func recreateText()
