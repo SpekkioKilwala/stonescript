@@ -10,8 +10,6 @@
 // ?key=backBegin
 //   logger.newLine(foe)
 
-
-
 var _log = []
 var active = 0
 var _style = -2
@@ -27,7 +25,7 @@ var t // reuse this
   p.anchor = top_right
   p.dock = top_right
   p.y = 1
-  p.w = 32
+  p.w = 64
   p.h = 12
   p.style = _style
 
