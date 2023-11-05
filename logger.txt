@@ -40,9 +40,21 @@ func init()
   p.h = p_border.h-1
   p.style = emptyStyle
   p.clip = true
-  t = ui.AddText("default")
+
+  t = setupTextComponent()
   p.Add(t)
-  recreateText()
+  updateText()
+
+func setupTextComponent()
+  var _t = ui.AddText()
+  _t.x = 1
+  _t.y = 1
+  _t.w = p.w-2 // you lose the border so the text needs to be a bit smaller than the panel
+  _t.h = p.h-2
+  _t.align = left
+  _t.dock = top_left
+  _t.anchor = top_left
+  return _t
 
 func restyle()
   p.style++
@@ -61,22 +73,10 @@ func log(_str)
   ?_log.Count()>maxHistory // this is only safe because we only add one line at a time; otherwise I'd need a loop.
     _log.RemoveAt(maxHistory-1)
   >@_log.Count()@
-  recreateText()
+  updateText()
 
-func recreateText()
-  // Remove the existing text component from the panel and make a new one from scratch from the _log array.
-  // I believe this is needed, otherwise it doesn't update.
-  p.Remove(t)
-  t = ui.AddText()
+func updateText()
   t.text = string.Join("\n", _log)
-  t.x = 1
-  t.y = 1
-  t.w = p.w-2 // you lose the border so the text needs to be a bit smaller than the panel
-  t.h = p.h-2
-  t.align = left
-  t.dock = top_left
-  t.anchor = top_left
-  p.Add(t)
 
 func toggleVisibility()
   ?p.visible = true
