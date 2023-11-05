@@ -37,7 +37,7 @@ func newTask(_task, _priority, _delay)
     // No, the answer is that I need to be clear between wanting to STAY in the same state, and wanting to REPEAT/RESTART an action.
     // I need to split up the layers of control; at the weakest level, you respect priority and don't replace an identical task.
     // and at the strongest level you just straight up SET it. There's maybe a middle level where you can replace an equal task.
-    // logger.newLine(_task)
+    // logger.log(_task)
     priority = _priority
     task = _task
     delay = _delay
