@@ -1,6 +1,8 @@
-// I think that the way to use this one is to import it, not assign it to a var.
-// I'm not SURE, but I THINK this should let me send things to the console from any script.
-// Which means it runs on every tick.
+// To call this, use:
+// var logger = import logger
+// in any script that needs it.
+// It will run asynchronously just fine, but remember that anything that you want to listen
+// for keypresses (like logging current game state) has to be executing on every tick.
 
 var _log = []
 var active = 0
@@ -44,9 +46,6 @@ func redraw()
     for i = 0 .. count - 1
       t = _log[i]
       t.y = 1 + i
-
-?key=backBegin
-  newLine(foe)
 
 //func log(str)
 

@@ -1,6 +1,6 @@
 // The way of the open hand
 
-import logger
+var logger = import logger
 
 // Test to make sure that this is working.
 >h-1,-1,ascii
