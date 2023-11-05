@@ -1,8 +1,16 @@
-// To call this, use:
+// The logger runs asynchronously. Example of using it for manual capture of data from a script
+// running continuously and hook up a visibility-toggle button:
+// (I put this in my main Mind Stone)
+
 // var logger = import logger
-// in any script that needs it.
-// It will run asynchronously just fine, but remember that anything that you want to listen
-// for keypresses (like logging current game state) has to be executing on every tick.
+//
+// ?key=bumpRBegin // C to toggle console
+//   logger.toggleVisibility()
+// 
+// ?key=backBegin
+//   logger.newLine(foe)
+
+
 
 var _log = []
 var active = 0
@@ -49,7 +57,7 @@ func redraw()
 
 //func log(str)
 
-?key=bumpRBegin // C to toggle the console display on or off
+func toggleVisibility()
   ?p.visible=true
     p.visible=false
   :
