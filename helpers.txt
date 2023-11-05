@@ -1,0 +1,30 @@
+// script for helper functions
+
+// to use:
+// var f = import helpers
+// >@f.look()@
+
+// (or whatever short identifier is helpful, but I'm going to standardise on f)
+// a single-letter library name is acceptable e.g. see lodash
+
+func xInsert(arr, index, element)
+  // insert the element into the given position of the array,
+  // avoiding the element 0 bug (can't use insert at 0 if an array is empty)
+  ?arr.Count()=0
+    arr.Add(element)
+  :
+    arr.Insert(index, element)
+
+func nz(foo, fallback)
+  // null-zero function
+  // if foo is null, return fallback, else return foo
+  // >@Type(foo)@
+  ?Type(foo)="null"
+    return fallback
+  :
+    return foo
+
+func look()
+  var template = "foe: ({0}) hrv: ({1}) pck: ({2})"
+  var str = string.Format(template, foe, harvest, pickup)
+  return str
