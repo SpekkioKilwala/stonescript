@@ -64,15 +64,10 @@ func restyle()
 func log(_str)
   // given a string, add it to the array, trim the array, then re-derive the contents of the console panel text.
   // "newest at the end" wasn't formatting right at all, so I'm putting the newest stuff at the TOP.
-  var str = _str + "" // I don't trust incoming stuff to actually be a string
-  // _log.Add(str)
-  ?_log.Count()=0
-    _log.Add(str) // You can't insert at 0 when an array is empty?
-  :
-    _log.Insert(0, str)
+  var str = nz(_str, "null") + "" // I don't trust incoming stuff to actually be a string
+  xInsert(_log, 0, str)
   ?_log.Count()>maxHistory // this is only safe because we only add one line at a time; otherwise I'd need a loop.
     _log.RemoveAt(maxHistory-1)
-  >@_log.Count()@
   updateText()
 
 func updateText()
@@ -85,3 +80,27 @@ func toggleVisibility()
   :
     p.visible = true
     p_border.visible = true
+
+// =============== HELPER FUNCTIONS, RELOCATE THESE
+
+func xInsert(arr, index, element)
+  // insert the element into the given position of the array,
+  // avoiding the element 0 bug (can't use insert at 0 if an array is empty)
+  ?arr.Count()=0
+    arr.Add(element)
+  :
+    arr.Insert(index, element)
+
+func nz(foo, fallback)
+  // null-zero function
+  // if foo is null, return fallback, else return foo
+  // >@Type(foo)@
+  ?Type(foo)="null"
+    return fallback
+  :
+    return foo
+
+func look()
+  var template = "foe: ({0}) hrv: ({1}) pck: ({2})"
+  var str = string.Format(template, foe, harvest, pickup)
+  return str

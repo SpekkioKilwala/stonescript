@@ -44,3 +44,12 @@ debuff_dot_2 (that's the defensive one)
 debuff_chill
 
 */
+
+/*
+Code
+
+Type(var) <-- Possible types include 'string', 'int', 'bool', 'function', 'object' and 'null'.
+
+
+
+*/
