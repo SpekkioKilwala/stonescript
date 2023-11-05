@@ -34,7 +34,7 @@ func newLine(str)
   // (correct vertical alignment is done by redraw())
   t = ui.AddText()
   t.text = str
-  t.w = p.w
+  t.w = p.w-2 // you lose the border so the text needs to be a bit smaller than the panel
   t.align = left
   t.dock = top_left
   t.anchor = top_left
