@@ -54,12 +54,12 @@ func recreateText()
   t = ui.AddText()
   t.text = string.Join("\n", _log)
   t.x = 1
-  t.y = -1
+  t.y = 1
   t.w = p.w-2 // you lose the border so the text needs to be a bit smaller than the panel
   t.h = p.h-2
   t.align = left
-  t.dock = bottom_left
-  t.anchor = bottom_left
+  t.dock = top_left
+  t.anchor = top_left
   p.Add(t)
 
 func toggleVisibility()
