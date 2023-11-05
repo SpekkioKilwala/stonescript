@@ -15,23 +15,39 @@ var _log = [] // all the different logged elements.
 var maxHistory = 20
 var active = 0
 var _style = -2
-var p // the panel
+var p_border // the panel with a VISIBLE border
+var p // the panel that actually bounds the text
+var emptyStyle = ui.AddStyle("#########")
 var t // the text element of the console; I'm not certain but I think I need to remake it each time.
 
 func init()
+  p_border = ui.AddPanel()
+  p_border.visible = true
+  p_border.color = #red
+  p_border.anchor = top_right
+  p_border.dock = top_right
+  p_border.y = 1
+  p_border.w = 64
+  p_border.h = 12
+  p_border.style = _style
+  p_border.clip = false
+
   p = ui.AddPanel()
-  p.visible=true
-  p.color = #red
-  p.anchor = top_right
-  p.dock = top_right
-  p.y = 1
-  p.w = 64
-  p.h = 12
-  p.style = _style
+  p_border.Add(p)
+  p.visible = true
+  p.y = -1
+  p.w = p_border.w
+  p.h = p_border.h-1
+  p.style = emptyStyle
   p.clip = true
   t = ui.AddText("default")
   p.Add(t)
   recreateText()
+
+func restyle()
+  p.style++
+  ?p.style > 8
+    p.style = -8
 
 func log(_str)
   // given a string, add it to the array, trim the array, then re-derive the contents of the console panel text.
@@ -63,7 +79,9 @@ func recreateText()
   p.Add(t)
 
 func toggleVisibility()
-  ?p.visible=true
-    p.visible=false
+  ?p.visible = true
+    p.visible = false
+    p_border.visible = false
   :
-    p.visible=true
+    p.visible = true
+    p_border.visible = true
