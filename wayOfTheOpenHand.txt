@@ -37,9 +37,9 @@ func tryPoison() // should we try poisoning this enemy?
 // This is odd. The range of a poison wand is supposed to be 17, but this only works right if I'm pulling it out a little sooner.
   ? poisonCooldown=0 & foe.distance <= 20 & foe.state!4 & foe.debuffs.string!"debuff_damage" & foe!immune_to_debuff_damage
     poisonCooldown = 20
-    return 1
+    return true
   :
-    return 0
+    return false
 
 // What are all my priority levels?
 // 13 Manual Input
@@ -87,10 +87,10 @@ priority--
 
 ?lowestActive() < priority
   //play ui_starnew
-  ?tryPoison()=1 // handles delay internally
+  ?tryPoison() // handles delay internally
     // readout = ?time
     // >o-8,-6,@readout@
-    rightHand.newTask(poison wand, priority, 15)
+    rightHand.newTask(poison wand, priority, 10)
 
 
 // ====== SECTION: SECONDARY ATTACK (6) ===== 

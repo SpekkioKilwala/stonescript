@@ -50,6 +50,14 @@ Code
 
 Type(var) <-- Possible types include 'string', 'int', 'bool', 'function', 'object' and 'null'.
 
+*/
 
+/*
+Weapon states
+
+1: ready
+2: attack animation
+3: follow-through (attack has completed)
+4: cooldown
 
 */

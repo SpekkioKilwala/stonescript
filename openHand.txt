@@ -6,6 +6,8 @@ var task = none // readable string of what is being done
 var delay = 0 // how much longer the current task will go for
 var priority = 0 // priority of the current task, can only be replaced by HIGHER priority
 
+var delayFloor = 0 // Delay can't decrement below this value via normal ticks; wands don't get their casting interrupted just because the initial delay elapses.
+
 var logger = import logger
 
 func init(_hand)
@@ -19,9 +21,25 @@ func handEquip(_thing)
   :
     // an error message would be nice
 
+func myItem()
+  ?hand = rh
+    return item.right
+  :
+    return item.left
+
+func myItemState()
+  ?hand = rh
+    return item.right.state
+  :
+    return item.left.state
 
 func tick()
-  ?delay>0
+  ?myItem()=wand & myItemState()=2 // we're trying to cast from a wand right now, don't let the delay elapse!
+    delayFloor = 1
+  :
+    delayFloor = 0
+  
+  ?delay>delayFloor
     delay--
   ?delay=0
     task=none
