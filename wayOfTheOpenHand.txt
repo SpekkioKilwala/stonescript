@@ -31,15 +31,32 @@ func lowestActive() // lowest priority hand to skip evaluating stuff that can't 
   return Math.min(leftHand.priority, rightHand.priority)
 
 var poisonCooldown = 0 // I want to give poison enough time to hit the enemy before recasting
+var dotCooldown = 0
+var chillCooldown = 0
 
 func tryPoison() // should we try poisoning this enemy?
 // Enemy must be in range, not poisoned, not dead, able to BE poisoned, and also not fired too recently.
 // This is odd. The range of a poison wand is supposed to be 17, but this only works right if I'm pulling it out a little sooner.
   ? poisonCooldown=0 & foe.distance <= 20 & foe.state!4 & foe.debuffs.string!"debuff_damage" & foe!immune_to_debuff_damage
-    poisonCooldown = 20
     return true
   :
     return false
+
+func tryDot() // should we try poisoning this enemy?
+// Enemy must be in range, not on fire, not dead, flammable, and also not fired too recently.
+  ? dotCooldown=0 & foe.distance <= 20 & foe.state!4 & foe.debuffs.string!"debuff_dot" & foe!immune_to_debuff_dot
+    return true
+  :
+    return false
+
+func tryChill() // should we try poisoning this enemy?
+// Enemy must be in range, not chilled, not dead, able to BE chilled, and also not fired too recently.
+  ? chillCooldown=0 & foe.distance <= 20 & foe.state!4 & foe.debuffs.string!"debuff_chill" & foe!immune_to_debuff_chill
+    return true
+  :
+    return false
+
+
 
 // What are all my priority levels?
 // 13 Manual Input
@@ -86,11 +103,16 @@ priority--
 //>o0,-3,@lowestActive()+ " " + priority@
 
 ?lowestActive() < priority
-  //play ui_starnew
-  ?tryPoison() // handles delay internally
-    // readout = ?time
-    // >o-8,-6,@readout@
-    rightHand.newTask(poison wand, priority, 10)
+  ?tryChill()
+    ?rightHand.newTask(ice wand, priority, 10)
+      chillCooldown = 20 // only do this if the hand took the job
+  ?tryPoison()
+    ?rightHand.newTask(poison wand, priority, 10)
+      poisonCooldown = 20 // only do this if the hand took the job
+  ?tryDot()
+    ?rightHand.newTask(fire wand, priority, 10)
+      dotCooldown = 20 // only do this if the hand took the job
+
 
 
 // ====== SECTION: SECONDARY ATTACK (6) ===== 
@@ -116,6 +138,12 @@ leftHand.tick()
 
 ?poisonCooldown>0
   poisonCooldown--
+
+?chillCooldown>0
+  chillCooldown--
+
+?dotCooldown>0
+  dotCooldown--
 
 // readout = string.Format(readoutTemplate, rightHand.priority, rightHand.task, rightHand.delay)
 //>o-8,-5,@readout@
