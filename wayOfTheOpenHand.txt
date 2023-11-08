@@ -124,7 +124,7 @@ priority--
     rightHand.newTask(parry, priority, 0)
   ?1=1 // conditional always goes here
     // because sword has a duration of zero, it will immediately run out on the next tick!
-    rightHand.newTask(sword, priority, 0)
+    rightHand.newTask("stone hammer", priority, 0)
 
 // ======= END OF AUTOMATIC ACTIONS
 
