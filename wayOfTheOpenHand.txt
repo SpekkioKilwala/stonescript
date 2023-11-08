@@ -56,7 +56,8 @@ func tryChill() // should we try poisoning this enemy?
   :
     return false
 
-
+func amHurt() // am I hurt?
+  return hp < maxhp
 
 // What are all my priority levels?
 // 13 Manual Input
@@ -97,7 +98,14 @@ priority--
   ?foe=collossal_snail & foe.state=32 & foe.time=27
     rightHand.newTask(parry, priority, 10)
 
-// ======== SECTION: DEBUFFS (8) =========
+// ========== SECTION: HEAL (9) =============
+priority--
+
+?lowestActive() < priority
+  ?foe.distance < 7 & amHurt() & foe!immune_to_physical
+    ?rightHand.newTask(vigor sword, priority, 0)
+
+// ======== SECTION: DEBUFFS (8) ============
 priority--
 
 //>o0,-3,@lowestActive()+ " " + priority@
