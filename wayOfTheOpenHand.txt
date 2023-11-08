@@ -27,8 +27,23 @@ var priority = 0
   rightHand.init(rh)
   initialised = 1
 
-func lowestActive() // lowest priority hand to skip evaluating stuff that can't happen
+func lowestActive() // find the lowest priority active on either hand, to skip checks if they're both too busy
   return Math.min(leftHand.priority, rightHand.priority)
+
+func eitherHandTask(task, priority, delay)
+  // given a task, try to give it to the left hand first,
+  // then the right if that failed.
+  // todo: specify which hand would be better to use.
+  // Most of the time I'm going to want to give jobs to the left hand first if they're available,
+  // because shields can ONLY go into the right hand.
+  ?leftHand.newTask(task, priority, delay)
+    return true
+  :?rightHand.newTask(task, priority, delay)
+    return true
+  :
+    return false // neither hand could take the task
+
+// ============ Stuff for clearer control ===========
 
 var poisonCooldown = 0 // I want to give poison enough time to hit the enemy before recasting
 var dotCooldown = 0
@@ -103,7 +118,7 @@ priority--
 
 ?lowestActive() < priority
   ?foe.distance < 7 & amHurt() & foe!immune_to_physical
-    ?rightHand.newTask(vigor sword, priority, 0)
+    eitherHandTask(vigor sword, priority, 0)
 
 // ======== SECTION: DEBUFFS (8) ============
 priority--
@@ -112,13 +127,13 @@ priority--
 
 ?lowestActive() < priority
   ?tryChill()
-    ?rightHand.newTask(ice wand, priority, 10)
+    ?eitherHandTask(ice wand, priority, 10)
       chillCooldown = 20 // only do this if the hand took the job
   ?tryPoison()
-    ?rightHand.newTask(poison wand, priority, 10)
+    ?eitherHandTask(poison wand, priority, 10)
       poisonCooldown = 20 // only do this if the hand took the job
   ?tryDot()
-    ?rightHand.newTask(fire wand, priority, 10)
+    ?eitherHandTask(fire wand, priority, 10)
       dotCooldown = 20 // only do this if the hand took the job
 
 
@@ -132,7 +147,7 @@ priority--
     rightHand.newTask(parry, priority, 0)
   ?1=1 // conditional always goes here
     // because sword has a duration of zero, it will immediately run out on the next tick!
-    rightHand.newTask("stone hammer", priority, 0)
+    eitherHandTask("stone hammer", priority, 0)
 
 // ======= END OF AUTOMATIC ACTIONS
 
