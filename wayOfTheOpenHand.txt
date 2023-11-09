@@ -74,8 +74,8 @@ func tryChill() // should we try poisoning this enemy via wand?
 func amHurt() // am I hurt?
   return hp < maxhp
 
-// func inCombat() // am I in combat?
-//   ?foe.distance<30 & 
+func inCombat() // am I in combat?
+  return foe.distance<30
 
 // What are all my priority levels?
 // 13 Manual Input
@@ -145,7 +145,7 @@ priority--
 priority--
 
 // lowest-priority combat clauses; they're all invalid outside combat
-?lowestActive() < priority
+?lowestActive() < priority & inCombat()
   ?loc=undead_crypt
     leftHand.newTask(vigor wand, priority, 0)
     rightHand.newTask(parry, priority, 0)
@@ -156,8 +156,9 @@ priority--
 // ========= SECTION: OUT OF BATTLE HEAL =======
 priority--
 
-// ?lowestActive() < priority
-
+?lowestActive() < priority
+  ?!inCombat() & amHurt()
+    eitherHandTask(ouroboros, priority, 0)
 
 // ======= END OF AUTOMATIC ACTIONS
 
