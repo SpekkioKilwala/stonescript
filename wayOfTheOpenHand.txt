@@ -49,30 +49,33 @@ var poisonCooldown = 0 // I want to give poison enough time to hit the enemy bef
 var dotCooldown = 0
 var chillCooldown = 0
 
-func tryPoison() // should we try poisoning this enemy?
-// Enemy must be in range, not poisoned, not dead, able to BE poisoned, and also not fired too recently.
+func tryPoison() // should we try poisoning this enemy via wand?
+// Enemy must be in range, not poisoned, not dead, able to BE poisoned, and also not fired too recently. And not immune to ranged.
 // This is odd. The range of a poison wand is supposed to be 17, but this only works right if I'm pulling it out a little sooner.
-  ? poisonCooldown=0 & foe.distance <= 20 & foe.state!4 & foe.debuffs.string!"debuff_damage" & foe!immune_to_debuff_damage
+  ? poisonCooldown=0 & foe.distance <= 20 & foe.state!4 & foe.debuffs.string!"debuff_damage" & foe!immune_to_debuff_damage & foe!immune_to_ranged
     return true
   :
     return false
 
-func tryDot() // should we try poisoning this enemy?
+func tryDot() // should we try poisoning this enemy via wand?
 // Enemy must be in range, not on fire, not dead, flammable, and also not fired too recently.
-  ? dotCooldown=0 & foe.distance <= 20 & foe.state!4 & foe.debuffs.string!"debuff_dot" & foe!immune_to_debuff_dot
+  ? dotCooldown=0 & foe.distance <= 20 & foe.state!4 & foe.debuffs.string!"debuff_dot" & foe!immune_to_debuff_dot & foe!immune_to_ranged
     return true
   :
     return false
 
-func tryChill() // should we try poisoning this enemy?
+func tryChill() // should we try poisoning this enemy via wand?
 // Enemy must be in range, not chilled, not dead, able to BE chilled, and also not fired too recently.
-  ? chillCooldown=0 & foe.distance <= 20 & foe.state!4 & foe.debuffs.string!"debuff_chill" & foe!immune_to_debuff_chill
+  ? chillCooldown=0 & foe.distance <= 20 & foe.state!4 & foe.debuffs.string!"debuff_chill" & foe!immune_to_debuff_chill & foe!immune_to_ranged
     return true
   :
     return false
 
 func amHurt() // am I hurt?
   return hp < maxhp
+
+// func inCombat() // am I in combat?
+//   ?foe.distance<30 & 
 
 // What are all my priority levels?
 // 13 Manual Input
@@ -141,6 +144,7 @@ priority--
 // ====== SECTION: SECONDARY ATTACK (6) ===== 
 priority--
 
+// lowest-priority combat clauses; they're all invalid outside combat
 ?lowestActive() < priority
   ?loc=undead_crypt
     leftHand.newTask(vigor wand, priority, 0)
@@ -148,6 +152,12 @@ priority--
   ?1=1 // conditional always goes here
     // because sword has a duration of zero, it will immediately run out on the next tick!
     eitherHandTask("stone hammer", priority, 0)
+
+// ========= SECTION: OUT OF BATTLE HEAL =======
+priority--
+
+// ?lowestActive() < priority
+
 
 // ======= END OF AUTOMATIC ACTIONS
 
