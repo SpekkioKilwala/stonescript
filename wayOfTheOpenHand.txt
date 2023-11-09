@@ -43,6 +43,14 @@ func eitherHandTask(task, priority, delay)
   :
     return false // neither hand could take the task
 
+func twoHandsTask(task, priority, delay)
+  // given a two-handed task e.g. equip skeleton arm until you hit an enemy.
+  // I need to ask BOTH hands if they can accept this task; they need new methods on that.
+  // IF SO, we give BOTH HANDS an identical "manual" task, with a short delay that works like the wand-cast: manual task doesn't actually give the equip command.
+  ?rightHand.isAvailableFor(priority) & leftHand.isAvailableFor(priority)
+    ?rightHand.newTask(manual, priority, 10) & leftHand.newTask(manual, priority, 10)
+      equip @task@
+
 // ============ Stuff for clearer control ===========
 
 var poisonCooldown = 0 // I want to give poison enough time to hit the enemy before recasting
@@ -108,6 +116,13 @@ priority = 15
 ?lowestActive() < priority
   ?key=bumpL // manual shield key
     rightHand.newTask(parry, priority, 3)
+
+// ========= SECTION: SPECIAL (11) ===========
+priority--
+
+?lowestActive() < priority
+  ?foe.distance<10 & buffs!pick_pocket
+    twoHandsTask("skeleton arm", priority, 10)
 
 // ======== SECTION: AUTO-PARRY (10) =========
 priority--
@@ -181,3 +196,5 @@ leftHand.tick()
 
 // readout = string.Format(readoutTemplate, rightHand.priority, rightHand.task, rightHand.delay)
 //>o-8,-5,@readout@
+
+logger.log(rightHand.task + rightHand.priority + rightHand.delay)

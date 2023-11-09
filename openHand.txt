@@ -33,8 +33,18 @@ func myItemState()
   :
     return item.left.state
 
+func isAvailableFor(_priority)
+  // would this hand hypothetically be available for a task of the given priority?
+  return _priority > priority
+
+func singleSwingItem() // is this a kind of item that we really want to swing ONCE?
+  var _item = myItem()
+  ?item=wand | item=skeleton
+    return true
+  return false
+
 func tick()
-  ?myItem()=wand & myItemState()=2 // we're trying to cast from a wand right now, don't let the delay elapse!
+  ?singleSwingItem & myItemState()=2 // we're trying to cast from a wand right now, don't let the delay elapse!
     delayFloor = 1
   :
     delayFloor = 0
@@ -59,5 +69,6 @@ func newTask(_task, _priority, _delay)
     priority = _priority
     task = _task
     delay = _delay
-    handEquip(task)
+    ?_task!"manual" // manual tasks e.g. 2-handers have their equips done inline.
+      handEquip(task)
     return 1
